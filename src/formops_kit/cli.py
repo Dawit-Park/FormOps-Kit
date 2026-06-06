@@ -28,8 +28,8 @@ EXAMPLE_CONFIG = """{
 """
 
 EXAMPLE_CSV = """Timestamp,Name,Email,Request Type,Preferred Date,Preferred Time,Message
-2026-06-06 09:00,Kim Mina,mina@example.com,Course inquiry,2026-06-12,14:00,I want to ask about the AI productivity course.
-2026-06-06 10:15,Park Joon,joon@example.com,Automation help,2026-06-13,10:30,Can you help automate our Google Forms workflow?
+2026-06-06 09:00,Sample Learner A,learner-a@example.com,Course inquiry,2026-06-12,14:00,I want to ask about the AI productivity course.
+2026-06-06 10:15,Sample Learner B,learner-b@example.com,Automation help,2026-06-13,10:30,Can you help automate our Google Forms workflow?
 """
 
 
