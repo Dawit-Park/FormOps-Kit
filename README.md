@@ -44,6 +44,32 @@ You can also create starter example files in another folder:
 formops init --path my-formops-workflow
 ```
 
+## Click-Only GUI
+
+For non-developers on Windows, FormOps Kit also includes a small local GUI.
+
+If you downloaded the source code, double-click:
+
+```text
+formops-gui.pyw
+```
+
+The GUI lets you choose:
+
+- a CSV input file
+- a `config.json` file
+- an output folder
+
+Then click **Compile packets**. The same local compiler is used under the hood, so the GUI does not send form data to Google, OpenAI, or any hosted backend.
+
+If you installed the package in a Python environment, you can also start the GUI with:
+
+```bash
+formops-gui
+```
+
+Current GUI limitation: it still requires Python with `tkinter` installed. A packaged one-file app or installer is not included yet.
+
 ## Example Workflows
 
 The repository includes several sample workflows that can be run as-is:
@@ -112,6 +138,7 @@ FormOps Kit v0.1 focuses on local CSV-to-files workflows:
 - Required field checks
 - Per-response output folders
 - Calendar `.ics` generation
+- Basic click-only GUI for local compilation
 - Summary report in `summary.json`
 - Example workflows for real operating patterns
 
@@ -121,12 +148,14 @@ FormOps Kit v0.1 focuses on local CSV-to-files workflows:
 - [x] Markdown packet generation
 - [x] Basic calendar `.ics` generation
 - [x] Multiple example workflows
+- [x] Basic click-only GUI
 - [ ] Google Sheets connector
 - [ ] Gmail draft connector
 - [ ] Google Calendar connector
 - [ ] Google Drive folder creator
 - [ ] Trello / Asana task export
 - [ ] Optional OpenAI-powered classification and draft generation
+- [ ] Packaged desktop app / installer for non-Python users
 
 ## Privacy and Safety
 
@@ -141,6 +170,12 @@ python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
 pytest
+```
+
+Run the GUI from a development checkout:
+
+```bash
+python formops-gui.pyw
 ```
 
 ## Maintainer Notes

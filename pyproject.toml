@@ -30,6 +30,7 @@ dev = ["pytest>=8"]
 
 [project.scripts]
 formops = "formops_kit.cli:main"
+formops-gui = "formops_kit.gui:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
