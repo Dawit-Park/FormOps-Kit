@@ -20,7 +20,7 @@ def test_compile_packets(tmp_path: Path):
 
     csv_path.write_text(
         "Name,Email,Request Type,Preferred Date,Preferred Time,Message\n"
-        "Kim Mina,mina@example.com,Course,2026-06-12,14:00,Hello\n",
+        "Sample Learner A,learner-a@example.com,Course,2026-06-12,14:00,Hello\n",
         encoding="utf-8",
     )
     config_path.write_text(
@@ -56,7 +56,7 @@ def test_compile_packets_skips_missing_required_fields(tmp_path: Path):
 
     csv_path.write_text(
         "Name,Email,Request Type\n"
-        "Kim Mina,,Course\n",
+        "Sample Learner A,,Course\n",
         encoding="utf-8",
     )
     config_path.write_text(
