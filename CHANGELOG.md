@@ -12,3 +12,4 @@
 - Basic local GUI for choosing CSV/config/output paths
 - Windows-friendly `formops-gui.pyw` launcher
 - GitHub Actions workflow for building a Windows GUI executable
+- Manual GitHub Release publishing workflow for v0.1

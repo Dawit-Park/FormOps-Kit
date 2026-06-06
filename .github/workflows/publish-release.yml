@@ -1,0 +1,56 @@
+name: Publish v0.1 Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag"
+        required: true
+        default: "v0.1.0"
+      prerelease:
+        description: "Mark as prerelease"
+        required: true
+        default: false
+        type: boolean
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-publish:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install build tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+      - name: Build GUI executable
+        run: |
+          pyinstaller --onefile --windowed --name FormOpsKit --add-data "examples;examples" formops-gui.pyw
+      - name: Publish GitHub release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = if ("${{ github.event_name }}" -eq "workflow_dispatch") { "${{ inputs.tag }}" } else { "${{ github.ref_name }}" }
+          $title = "FormOps Kit $tag"
+          $asset = "dist/FormOpsKit.exe"
+          $notes = "docs/release-v0.1.0.md"
+          $prerelease = "${{ inputs.prerelease }}"
+
+          if (gh release view $tag 2>$null) {
+            gh release upload $tag $asset --clobber
+            gh release edit $tag --title $title --notes-file $notes --target $env:GITHUB_SHA
+          } else {
+            $args = @("release", "create", $tag, $asset, "--title", $title, "--notes-file", $notes, "--target", $env:GITHUB_SHA)
+            if ($prerelease -eq "true") {
+              $args += "--prerelease"
+            }
+            gh @args
+          }

@@ -76,6 +76,16 @@ formops-gui
 
 Current GUI limitation: direct double-click from the source checkout still requires Python with `tkinter` installed. The repository includes a GitHub Actions workflow that can build a Windows `FormOpsKit.exe` artifact, but a formal installer is not included yet.
 
+## Windows Release Build
+
+Maintainers can publish a Windows executable release from GitHub:
+
+1. Open the repository's **Actions** tab.
+2. Run **Publish v0.1 Release**.
+3. Keep the default tag `v0.1.0`, or provide a new `v*` tag.
+
+The workflow builds `FormOpsKit.exe` and attaches it to the GitHub Release. The release still has no installer; users download and run the executable directly.
+
 ## Example Workflows
 
 The repository includes several sample workflows that can be run as-is:
@@ -156,6 +166,7 @@ FormOps Kit v0.1 focuses on local CSV-to-files workflows:
 - [x] Multiple example workflows
 - [x] Basic click-only GUI
 - [x] Windows executable build workflow
+- [x] Manual GitHub Release publishing workflow
 - [ ] Google Sheets connector
 - [ ] Gmail draft connector
 - [ ] Google Calendar connector
