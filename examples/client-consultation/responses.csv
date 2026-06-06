@@ -1,3 +1,3 @@
 Timestamp,Company,Contact Name,Email,Request Type,Preferred Date,Preferred Time,Budget Range,Context,Success Criteria
-2026-06-06 11:00,Lumi Studio,Han Sora,sora@example.com,Form follow-up automation,2026-06-14,15:00,$1k-$3k,We collect workshop applications in Google Forms,Respond to each applicant within one business day
-2026-06-06 13:20,Northline Lab,Lee Minho,minho@example.com,Internal request triage,2026-06-15,09:30,$3k-$5k,Our ops team handles spreadsheet requests manually,Create a repeatable intake workflow
+2026-06-06 11:00,Example Company A,Sample Contact A,contact-a@example.com,Form follow-up automation,2026-06-14,15:00,$1k-$3k,We collect workshop applications in Google Forms,Respond to each applicant within one business day
+2026-06-06 13:20,Example Company B,Sample Contact B,contact-b@example.com,Internal request triage,2026-06-15,09:30,$3k-$5k,Our ops team handles spreadsheet requests manually,Create a repeatable intake workflow
