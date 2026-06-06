@@ -38,13 +38,13 @@ The default v0.1.0 workflow is local-first. It does not send CSV data to Google,
 
 ## Publishing
 
-Maintainers can publish this release from GitHub Actions:
+Maintainers can publish this release from GitHub Actions or by updating the release workflow/release notes on `main`:
 
 1. Open **Actions**.
 2. Select **Publish v0.1 Release**.
 3. Run the workflow with tag `v0.1.0`.
 
-The workflow builds `FormOpsKit.exe` and attaches it to the GitHub Release.
+The workflow builds `FormOpsKit.exe`, creates or updates the `v0.1.0` GitHub Release, and attaches the executable.
 
 ## Verification Commands
 

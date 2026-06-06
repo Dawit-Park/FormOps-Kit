@@ -13,7 +13,11 @@ on:
         default: false
         type: boolean
   push:
+    branches: ["main"]
     tags: ["v*"]
+    paths:
+      - ".github/workflows/publish-release.yml"
+      - "docs/release-v0.1.0.md"
 
 permissions:
   contents: write
@@ -38,7 +42,18 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          $tag = if ("${{ github.event_name }}" -eq "workflow_dispatch") { "${{ inputs.tag }}" } else { "${{ github.ref_name }}" }
+          $eventName = "${{ github.event_name }}"
+          $ref = "${{ github.ref }}"
+          $refName = "${{ github.ref_name }}"
+
+          if ($eventName -eq "workflow_dispatch") {
+            $tag = "${{ inputs.tag }}"
+          } elseif ($ref.StartsWith("refs/tags/")) {
+            $tag = $refName
+          } else {
+            $tag = "v0.1.0"
+          }
+
           $title = "FormOps Kit $tag"
           $asset = "dist/FormOpsKit.exe"
           $notes = "docs/release-v0.1.0.md"
