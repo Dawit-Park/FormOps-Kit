@@ -12,10 +12,17 @@ from .core import compile_packets
 
 
 def find_project_root() -> Path:
+    bundle_root = getattr(sys, "_MEIPASS", None)
+    if bundle_root:
+        return Path(bundle_root)
     package_root = Path(__file__).resolve().parents[2]
     if (package_root / "examples").exists():
         return package_root
     return Path.cwd()
+
+
+def default_output_dir() -> Path:
+    return Path.home() / "FormOps Kit Output"
 
 
 def open_folder(path: Path) -> None:
@@ -35,7 +42,7 @@ class FormOpsApp:
 
         self.input_csv = tk.StringVar(value=str(self.project_root / "examples" / "responses.csv"))
         self.config_json = tk.StringVar(value=str(self.project_root / "examples" / "config.json"))
-        self.output_dir = tk.StringVar(value=str(self.project_root / "outbox" / "gui"))
+        self.output_dir = tk.StringVar(value=str(default_output_dir()))
         self.status = tk.StringVar(value="Ready")
 
         self.root.title("FormOps Kit")
@@ -123,7 +130,7 @@ class FormOpsApp:
     def _use_quickstart(self) -> None:
         self.input_csv.set(str(self.project_root / "examples" / "responses.csv"))
         self.config_json.set(str(self.project_root / "examples" / "config.json"))
-        self.output_dir.set(str(self.project_root / "outbox" / "gui"))
+        self.output_dir.set(str(default_output_dir()))
         self._write_log("Loaded the quick-start example paths.\n")
 
     def _compile(self) -> None:

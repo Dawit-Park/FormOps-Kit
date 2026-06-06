@@ -62,13 +62,19 @@ The GUI lets you choose:
 
 Then click **Compile packets**. The same local compiler is used under the hood, so the GUI does not send form data to Google, OpenAI, or any hosted backend.
 
+By default, GUI output is written to:
+
+```text
+~/FormOps Kit Output
+```
+
 If you installed the package in a Python environment, you can also start the GUI with:
 
 ```bash
 formops-gui
 ```
 
-Current GUI limitation: it still requires Python with `tkinter` installed. A packaged one-file app or installer is not included yet.
+Current GUI limitation: direct double-click from the source checkout still requires Python with `tkinter` installed. The repository includes a GitHub Actions workflow that can build a Windows `FormOpsKit.exe` artifact, but a formal installer is not included yet.
 
 ## Example Workflows
 
@@ -149,13 +155,14 @@ FormOps Kit v0.1 focuses on local CSV-to-files workflows:
 - [x] Basic calendar `.ics` generation
 - [x] Multiple example workflows
 - [x] Basic click-only GUI
+- [x] Windows executable build workflow
 - [ ] Google Sheets connector
 - [ ] Gmail draft connector
 - [ ] Google Calendar connector
 - [ ] Google Drive folder creator
 - [ ] Trello / Asana task export
 - [ ] Optional OpenAI-powered classification and draft generation
-- [ ] Packaged desktop app / installer for non-Python users
+- [ ] Formal packaged desktop installer for non-Python users
 
 ## Privacy and Safety
 

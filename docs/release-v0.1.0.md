@@ -18,6 +18,7 @@ FormOps Kit v0.1.0 turns form response CSV files into local operation packets. I
 - Multiple fictional example workflows
 - Basic local GUI for choosing CSV, config, and output folder
 - Windows-friendly `formops-gui.pyw` launcher
+- GitHub Actions workflow for building a Windows `FormOpsKit.exe` artifact
 - CI workflow for Python 3.9 through 3.12
 
 ## Privacy
@@ -31,7 +32,8 @@ The default v0.1.0 workflow is local-first. It does not send CSV data to Google,
 - No automatic Google Drive folder creation yet
 - No automatic Google Calendar event creation yet
 - No OpenAI-powered classification or drafting yet
-- The GUI requires Python with `tkinter`; no packaged installer is included yet
+- Direct double-click from source requires Python with `tkinter`
+- The Windows executable is built as a workflow artifact; no formal installer is included yet
 
 ## Verification Commands
 

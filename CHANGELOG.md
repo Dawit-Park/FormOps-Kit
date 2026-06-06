@@ -11,3 +11,4 @@
 - Stable calendar event UIDs for regenerated packets
 - Basic local GUI for choosing CSV/config/output paths
 - Windows-friendly `formops-gui.pyw` launcher
+- GitHub Actions workflow for building a Windows GUI executable
