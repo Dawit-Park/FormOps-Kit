@@ -1,0 +1,18 @@
+{
+  "workflow_name": "Course Intake",
+  "folder_name_template": "{Name}-{Course}",
+  "required_fields": ["Name", "Email", "Course"],
+  "templates": {
+    "task.md": "# Course intake follow-up for {Name}\n\n- [ ] Review course interest: {Course}\n- [ ] Reply to {Email}\n- [ ] Check preferred session: {Preferred Date} {Preferred Time}\n- [ ] Add learner goal to CRM or notes\n- [ ] Prepare next-step resources\n\n## Learner goal\n{Goal}\n\n## Message\n{Message}\n",
+    "email-draft.md": "Subject: Your {Course} inquiry\n\nHi {Name},\n\nThanks for your interest in {Course}. I reviewed your goal: {Goal}\n\nThe next available follow-up time I have noted is {Preferred Date} at {Preferred Time}. I will send the next steps and any preparation materials shortly.\n\nBest,\nFormOps Kit example\n",
+    "drive-folder-plan.md": "# Drive folder plan\n\nFolder: {Name} - {Course}\n\nSuggested files:\n- intake.md\n- learner-goal.md\n- follow-up-notes.md\n- resources/\n"
+  },
+  "calendar": {
+    "enabled": true,
+    "date_field": "Preferred Date",
+    "time_field": "Preferred Time",
+    "duration_minutes": 30,
+    "title_template": "Course follow-up: {Name} / {Course}",
+    "description_template": "Email: {Email}\nGoal: {Goal}\nMessage: {Message}"
+  }
+}

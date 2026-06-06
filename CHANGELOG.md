@@ -1,0 +1,11 @@
+# Changelog
+
+## 0.1.0
+
+- Initial local-first CSV compiler
+- Markdown operation packet generation
+- Basic calendar `.ics` generation
+- Example config and responses
+- CI workflow and tests
+- Multiple real-world example workflows
+- Stable calendar event UIDs for regenerated packets

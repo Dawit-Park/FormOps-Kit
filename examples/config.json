@@ -1,0 +1,18 @@
+{
+  "workflow_name": "Consultation Intake",
+  "folder_name_template": "{Name}-{Request Type}",
+  "required_fields": ["Name", "Email"],
+  "templates": {
+    "task.md": "# Follow-up for {Name}\n\n- [ ] Reply to {Email}\n- [ ] Review request type: {Request Type}\n- [ ] Check preferred date: {Preferred Date} {Preferred Time}\n- [ ] Create Drive folder\n\n## Notes\n{Message}\n",
+    "email-draft.md": "Subject: We received your request\n\nHi {Name},\n\nThanks for your message about {Request Type}. We received it and will follow up soon.\n\nBest,\nYour team\n",
+    "drive-folder-plan.md": "# Drive folder plan\n\nFolder name: {Name} - {Request Type}\n\nSuggested files:\n- intake.md\n- notes.md\n- attachments/\n"
+  },
+  "calendar": {
+    "enabled": true,
+    "date_field": "Preferred Date",
+    "time_field": "Preferred Time",
+    "duration_minutes": 30,
+    "title_template": "Follow-up: {Name} / {Request Type}",
+    "description_template": "Email: {Email}\nMessage: {Message}"
+  }
+}

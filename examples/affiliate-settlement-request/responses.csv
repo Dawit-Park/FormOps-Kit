@@ -1,0 +1,3 @@
+Timestamp,Partner Name,Email,Settlement Period,Requested Amount,Invoice Link,Payment Method,Due Date,Notes
+2026-06-06 14:00,Alpha Creators,alpha@example.com,2026-05,$820,https://example.com/invoice-alpha,Bank transfer,2026-06-20,Includes May campaign referrals
+2026-06-06 14:35,Beta Partners,beta@example.com,2026-05,$460,https://example.com/invoice-beta,PayPal,2026-06-21,Please verify tax document status

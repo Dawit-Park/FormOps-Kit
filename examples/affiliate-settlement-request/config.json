@@ -1,0 +1,17 @@
+{
+  "workflow_name": "Affiliate Settlement Request",
+  "folder_name_template": "{Partner Name}-{Settlement Period}",
+  "required_fields": ["Partner Name", "Email", "Settlement Period"],
+  "templates": {
+    "task.md": "# Settlement request: {Partner Name}\n\n- [ ] Confirm settlement period: {Settlement Period}\n- [ ] Review requested amount: {Requested Amount}\n- [ ] Check invoice link: {Invoice Link}\n- [ ] Verify payment method: {Payment Method}\n- [ ] Reply to {Email}\n- [ ] Mark due date: {Due Date}\n\n## Notes\n{Notes}\n",
+    "email-draft.md": "Subject: Settlement request received for {Settlement Period}\n\nHi {Partner Name},\n\nThanks for sending the settlement request for {Settlement Period}. I received the requested amount of {Requested Amount} and will review the invoice link and payment details.\n\nI have the due date noted as {Due Date}. I will follow up if anything is missing.\n\nBest,\nFormOps Kit example\n",
+    "drive-folder-plan.md": "# Drive folder plan\n\nFolder: {Partner Name} - {Settlement Period}\n\nSuggested files:\n- settlement-request.md\n- invoice.pdf\n- verification-notes.md\n- payment-record.md\n"
+  },
+  "calendar": {
+    "enabled": true,
+    "date_field": "Due Date",
+    "duration_minutes": 30,
+    "title_template": "Settlement due: {Partner Name} / {Settlement Period}",
+    "description_template": "Email: {Email}\nAmount: {Requested Amount}\nInvoice: {Invoice Link}"
+  }
+}

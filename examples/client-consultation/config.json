@@ -1,0 +1,18 @@
+{
+  "workflow_name": "Client Consultation",
+  "folder_name_template": "{Company}-{Request Type}",
+  "required_fields": ["Company", "Contact Name", "Email"],
+  "templates": {
+    "task.md": "# Consultation packet: {Company}\n\n- [ ] Review request type: {Request Type}\n- [ ] Reply to {Contact Name} at {Email}\n- [ ] Confirm preferred consultation time: {Preferred Date} {Preferred Time}\n- [ ] Check budget range: {Budget Range}\n- [ ] Prepare discovery questions\n\n## Context\n{Context}\n\n## Success criteria\n{Success Criteria}\n",
+    "email-draft.md": "Subject: Consultation request from {Company}\n\nHi {Contact Name},\n\nThanks for reaching out about {Request Type}. I reviewed the context you shared and can prepare a short consultation around the outcome you described: {Success Criteria}\n\nI have your preferred time as {Preferred Date} at {Preferred Time}. I will follow up with confirmation and a few questions before the call.\n\nBest,\nFormOps Kit example\n",
+    "drive-folder-plan.md": "# Drive folder plan\n\nFolder: {Company} - {Request Type}\n\nSuggested files:\n- intake.md\n- discovery-questions.md\n- meeting-notes.md\n- proposal-draft.md\n- assets/\n"
+  },
+  "calendar": {
+    "enabled": true,
+    "date_field": "Preferred Date",
+    "time_field": "Preferred Time",
+    "duration_minutes": 45,
+    "title_template": "Consultation: {Company} / {Request Type}",
+    "description_template": "Contact: {Contact Name} <{Email}>\nBudget: {Budget Range}\nContext: {Context}"
+  }
+}
