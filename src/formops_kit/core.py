@@ -29,17 +29,30 @@ class CompileResult:
 def load_config(path: Path) -> Dict[str, Any]:
     with path.open("r", encoding="utf-8") as f:
         config = json.load(f)
+    return validate_config(config)
+
+
+def validate_config(config: Dict[str, Any]) -> Dict[str, Any]:
     if "templates" not in config or not isinstance(config["templates"], dict):
         raise ValueError("Config must include a 'templates' object.")
     return config
 
 
 def load_csv(path: Path) -> List[Dict[str, str]]:
-    with path.open("r", encoding="utf-8-sig", newline="") as f:
-        reader = csv.DictReader(f)
-        if not reader.fieldnames:
-            raise ValueError("CSV file has no header row.")
-        return [{k: (v or "") for k, v in row.items()} for row in reader]
+    last_error: Optional[UnicodeDecodeError] = None
+    for encoding in ("utf-8-sig", "utf-8", "cp949", "euc-kr"):
+        try:
+            with path.open("r", encoding=encoding, newline="") as f:
+                reader = csv.DictReader(f)
+                if not reader.fieldnames:
+                    raise ValueError("CSV file has no header row.")
+                return [{k: (v or "") for k, v in row.items()} for row in reader]
+        except UnicodeDecodeError as exc:
+            last_error = exc
+            continue
+    if last_error:
+        raise ValueError("CSV file could not be read as UTF-8, CP949, or EUC-KR.") from last_error
+    raise ValueError("CSV file could not be read.")
 
 
 def render_template(template: str, row: Mapping[str, str]) -> str:
@@ -68,9 +81,70 @@ def row_is_complete(row: Mapping[str, str], required_fields: Iterable[str]) -> b
     return all(str(row.get(field, "")).strip() for field in required_fields)
 
 
+def normalize_date_value(value: str) -> str:
+    value = (value or "").strip()
+    value = re.sub(r"\s*\([^)]*\)\s*", "", value).strip()
+
+    korean = re.fullmatch(r"(\d{4})\s*년\s*(\d{1,2})\s*월\s*(\d{1,2})\s*일?", value)
+    if korean:
+        year, month, day = korean.groups()
+        return f"{int(year):04d}-{int(month):02d}-{int(day):02d}"
+
+    dotted = re.fullmatch(r"(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})\.?", value)
+    if dotted:
+        year, month, day = dotted.groups()
+        return f"{int(year):04d}-{int(month):02d}-{int(day):02d}"
+
+    return value
+
+
+def normalize_time_value(value: str) -> str:
+    value = (value or "").strip()
+    if not value:
+        return ""
+
+    lower = value.lower()
+    is_pm = lower.startswith("오후") or lower.endswith("pm")
+    is_am = lower.startswith("오전") or lower.endswith("am")
+    cleaned = lower
+    for marker in ("오전", "오후", "am", "pm"):
+        cleaned = cleaned.replace(marker, "")
+    cleaned = cleaned.strip()
+    cleaned = cleaned.replace("시", ":").replace("분", "")
+    cleaned = re.sub(r"\s+", "", cleaned)
+    cleaned = cleaned.rstrip(":")
+
+    match = re.fullmatch(r"(\d{1,2})(?::(\d{1,2}))?", cleaned)
+    if not match:
+        return value
+
+    hour = int(match.group(1))
+    minute = int(match.group(2) or "0")
+    if is_pm and hour < 12:
+        hour += 12
+    if is_am and hour == 12:
+        hour = 0
+    if not (0 <= hour <= 23 and 0 <= minute <= 59):
+        return value
+    return f"{hour:02d}:{minute:02d}"
+
+
 def parse_datetime(date_value: str, time_value: str = "") -> Optional[datetime]:
-    date_value = (date_value or "").strip()
-    time_value = (time_value or "").strip()
+    raw_date_value = (date_value or "").strip()
+    raw_time_value = (time_value or "").strip()
+    if raw_date_value and not raw_time_value:
+        combined = re.fullmatch(
+            r"(.+?)\s+((?:오전|오후)\s*)?(\d{1,2})(?:(?:\s*시\s*(\d{1,2})?\s*분?)|(?::(\d{1,2})))",
+            raw_date_value,
+        )
+        if combined:
+            marker = combined.group(2) or ""
+            minute = combined.group(4) or combined.group(5) or "00"
+            raw_date_value = combined.group(1)
+            raw_time_value = f"{marker}{combined.group(3)}:{minute}"
+
+    date_value = normalize_date_value(raw_date_value)
+    time_value = normalize_time_value(raw_time_value)
     if not date_value:
         return None
 
@@ -83,6 +157,10 @@ def parse_datetime(date_value: str, time_value: str = "") -> Optional[datetime]:
             (f"{date_value} {time_value}", "%m/%d/%Y %H:%M"),
         ])
     candidates.extend([
+        (date_value, "%Y-%m-%d %H:%M"),
+        (date_value, "%Y/%m/%d %H:%M"),
+        (date_value, "%Y.%m.%d %H:%M"),
+        (date_value, "%m/%d/%Y %H:%M"),
         (date_value, "%Y-%m-%d"),
         (date_value, "%Y/%m/%d"),
         (date_value, "%Y.%m.%d"),
@@ -135,8 +213,14 @@ def make_ics(
     ])
 
 
-def compile_packets(input_csv: Path, config_path: Path, output_dir: Path) -> CompileResult:
-    config = load_config(config_path)
+def compile_packets_from_config(
+    input_csv: Path,
+    config: Dict[str, Any],
+    output_dir: Path,
+    *,
+    config_source: str = "inline config",
+) -> CompileResult:
+    config = validate_config(config)
     rows = load_csv(input_csv)
 
     workflow_name = config.get("workflow_name", "FormOps Workflow")
@@ -187,7 +271,7 @@ def compile_packets(input_csv: Path, config_path: Path, output_dir: Path) -> Com
     summary = {
         "workflow_name": workflow_name,
         "input_csv": str(input_csv),
-        "config": str(config_path),
+        "config": config_source,
         "rows_seen": len(rows),
         "packets_created": packets_created,
         "skipped_rows": skipped_rows,
@@ -200,4 +284,14 @@ def compile_packets(input_csv: Path, config_path: Path, output_dir: Path) -> Com
         packets_created=packets_created,
         skipped_rows=skipped_rows,
         warnings=warnings,
+    )
+
+
+def compile_packets(input_csv: Path, config_path: Path, output_dir: Path) -> CompileResult:
+    config = load_config(config_path)
+    return compile_packets_from_config(
+        input_csv=input_csv,
+        config=config,
+        output_dir=output_dir,
+        config_source=str(config_path),
     )

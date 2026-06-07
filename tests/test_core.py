@@ -2,7 +2,16 @@ from pathlib import Path
 
 from datetime import datetime
 
-from formops_kit.core import compile_packets, make_ics, render_template, slugify
+from formops_kit.core import (
+    compile_packets,
+    compile_packets_from_config,
+    load_csv,
+    make_ics,
+    parse_datetime,
+    render_template,
+    slugify,
+)
+from formops_kit.presets import get_preset
 
 
 def test_render_template_replaces_csv_columns():
@@ -75,6 +84,44 @@ def test_compile_packets_skips_missing_required_fields(tmp_path: Path):
     assert result.packets_created == 0
     assert result.skipped_rows == 1
     assert result.warnings
+
+
+def test_load_csv_reads_korean_excel_cp949(tmp_path: Path):
+    csv_path = tmp_path / "responses.csv"
+    csv_path.write_bytes("이름,이메일\n샘플 사용자,user@example.com\n".encode("cp949"))
+
+    rows = load_csv(csv_path)
+
+    assert rows == [{"이름": "샘플 사용자", "이메일": "user@example.com"}]
+
+
+def test_parse_datetime_accepts_korean_date_and_time():
+    assert parse_datetime("2026년 6월 12일", "오후 2시").strftime("%Y-%m-%d %H:%M") == "2026-06-12 14:00"
+    assert parse_datetime("2026.06.13", "오전 10:30").strftime("%Y-%m-%d %H:%M") == "2026-06-13 10:30"
+    assert parse_datetime("2026년 6월 14일 오후 3시 30분").strftime("%Y-%m-%d %H:%M") == "2026-06-14 15:30"
+
+
+def test_compile_packets_from_korean_preset(tmp_path: Path):
+    preset = get_preset("kr-course-inquiry")
+    csv_path = tmp_path / "responses.csv"
+    output_dir = tmp_path / "outbox"
+    csv_path.write_text(preset.sample_csv, encoding="utf-8-sig")
+
+    result = compile_packets_from_config(
+        input_csv=csv_path,
+        config=preset.config,
+        output_dir=output_dir,
+        config_source=f"preset:{preset.slug}",
+    )
+
+    assert result.rows_seen == 2
+    assert result.packets_created == 2
+    packet_dirs = [p for p in output_dir.iterdir() if p.is_dir()]
+    assert len(packet_dirs) == 2
+    assert (packet_dirs[0] / "처리체크리스트.md").exists()
+    assert (packet_dirs[0] / "답장초안.md").exists()
+    assert (packet_dirs[0] / "폴더계획.md").exists()
+    assert (packet_dirs[0] / "calendar.ics").exists()
 
 
 def test_make_ics_uses_stable_uid_for_same_event():

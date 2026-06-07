@@ -1,4 +1,4 @@
-name: Publish v0.1 Release
+name: Publish Release
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
       tag:
         description: "Release tag"
         required: true
-        default: "v0.1.0"
+        default: "v0.1.1"
       prerelease:
         description: "Mark as prerelease"
         required: true
@@ -17,7 +17,7 @@ on:
     tags: ["v*"]
     paths:
       - ".github/workflows/publish-release.yml"
-      - "docs/release-v0.1.0.md"
+      - "docs/release-v0.1.1.md"
 
 permissions:
   contents: write
@@ -55,12 +55,12 @@ jobs:
           } elseif ($ref.StartsWith("refs/tags/")) {
             $tag = $refName
           } else {
-            $tag = "v0.1.0"
+            $tag = "v0.1.1"
           }
 
           $title = "FormOps Kit $tag"
           $asset = "dist/FormOpsKit.exe"
-          $notes = "docs/release-v0.1.0.md"
+          $notes = "docs/release-v0.1.1.md"
           $prerelease = "${{ inputs.prerelease }}"
 
           if (gh release view $tag 2>$null) {
