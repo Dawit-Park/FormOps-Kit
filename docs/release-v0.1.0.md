@@ -20,6 +20,7 @@ FormOps Kit v0.1.0 turns form response CSV files into local operation packets. I
 - Windows-friendly `formops-gui.pyw` launcher
 - GitHub Actions workflow for building a Windows `FormOpsKit.exe` artifact
 - Manual GitHub Release publishing workflow
+- Rebuilt Windows executable with the `formops_kit` package included
 - CI workflow for Python 3.9 through 3.12
 
 ## Privacy

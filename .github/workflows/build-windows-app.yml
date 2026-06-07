@@ -17,10 +17,14 @@ jobs:
       - name: Install build tools
         run: |
           python -m pip install --upgrade pip
+          pip install -e .
           pip install pyinstaller
+      - name: Verify GUI import
+        run: |
+          python -c "import formops_kit.gui"
       - name: Build GUI executable
         run: |
-          pyinstaller --onefile --windowed --name FormOpsKit --add-data "examples;examples" formops-gui.pyw
+          pyinstaller --onefile --windowed --name FormOpsKit --paths src --add-data "examples;examples" formops-gui.pyw
       - name: Upload Windows executable
         uses: actions/upload-artifact@v4
         with:

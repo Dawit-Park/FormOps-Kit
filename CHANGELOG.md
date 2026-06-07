@@ -13,3 +13,4 @@
 - Windows-friendly `formops-gui.pyw` launcher
 - GitHub Actions workflow for building a Windows GUI executable
 - Manual GitHub Release publishing workflow for v0.1
+- Fixed the Windows executable build so the bundled app includes the `formops_kit` package
